@@ -3,6 +3,7 @@ using ATM;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ATM.Exceptions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ATMTest
 {
@@ -123,6 +124,31 @@ namespace ATMTest
 
             atm.InsertCard("user");
             Assert.ThrowsException<IncorectMoneyWithdrawalAmountException>(() => atm.WithdrawMoney(23));
+
+        }
+        [TestMethod]
+        public void Test_WithdrawMoney()
+        {
+            ATMachine atm = new ATMachine("AtmCo", "123");
+
+            atm.InsertCard("user");
+            atm.WithdrawMoney(500);
+            var test = atm.RetrievesChargedFees();
+            var testItem = test.First();
+            Assert.AreEqual(testItem.CardNumber,"user");
+            Assert.AreEqual(testItem.WithdrawalFeeAmount, 5);
+            
+        }
+        [TestMethod]
+        public void TestEnumTest()
+        {
+            ATMachine atm = new ATMachine("AtmCo", "123");
+
+            
+            Assert.AreEqual(Convert.ToInt32(PaperNote.FiveEuro),5);
+            Assert.AreEqual(Convert.ToInt32(PaperNote.TenEuro), 10);
+            Assert.AreEqual(Convert.ToInt32(PaperNote.TwentyEuro), 20);
+            Assert.AreEqual(Convert.ToInt32(PaperNote.FiftyEuro) ,50);
 
         }
     }

@@ -40,7 +40,7 @@ namespace ATM
         {
             {"user",1000 }
         };
-        
+        public List<Fee> ATMHistory = new List<Fee>();
         public decimal GetCardBalance()
         {
             if (!CardInserted)
@@ -87,7 +87,7 @@ namespace ATM
 
         public IEnumerable<Fee> RetrievesChargedFees()
         {
-            throw new NotImplementedException();
+            return ATMHistory;
         }
 
         public void ReturnCard()
@@ -107,7 +107,10 @@ namespace ATM
                 throw new IncorectMoneyWithdrawalAmountException();
             else
             {
-                throw new NotImplementedException();
+                /// There need to be a calculation for papernotes and validations
+                /// but i was a little bit short on time limits
+                ATMHistory.Add(new Fee { CardNumber = CardNumber, WithdrawalFeeAmount = Convert.ToDecimal(amount * 0.01), WithdrawalDate = DateTime.Now });
+                return new Money { Amount = 0, Notes= new Dictionary<PaperNote, int>() };
             }
         }
     }
@@ -118,9 +121,14 @@ namespace ATM
     }
     public struct Fee
     {
-        public string cardNumber { get;set;}
+        public string CardNumber { get;set;}
         public decimal WithdrawalFeeAmount { get; set; }
         public DateTime WithdrawalDate { get; set; }
+
+        public bool Equals(Fee other)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public enum PaperNote
